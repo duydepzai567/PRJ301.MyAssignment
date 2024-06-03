@@ -1,0 +1,20 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 3, 2024, 8:30:46 PM
+    Author     : DUCDUY2003
+*/
+
+
+
+body{
+    ont-family: "Helvetica Neue", "Open sans", sans-serif;
+    background-color: gray;
+    background-image: -webkit-linear-gradient(top left, #a802e0, #f7676a);
+    color: white;
+}
+#id{
+    color: red;
+}
