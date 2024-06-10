@@ -23,8 +23,8 @@ public class UserDBContext extends DBContext<User>{
             String sql = "SELECT [username]\n"
                     + "      ,[password]\n"
                     + "      ,[displayname]\n"
-                    + "  FROM [users]\n"
-                    + "  WHERE [username] = ? AND [password] = ?";
+                    + "  FROM [Account]\n"
+                    + "  where [username] = ? AND [password] = ?";
             
             stm = connection.prepareStatement(sql);
             stm.setString(1, username);

@@ -4,6 +4,7 @@
  */
 package controller.Support;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ public abstract class DBContext <T>{
         try {
             String user = "duy";
             String pass = "12345";
-            String url = "jdbc:sqlserver://LAPTOP-JNL3LDJO\\SQLEXPRESS:1433;databaseName=Assignment;encrypt=true;trustServerCertificate=true; [duy on db_accessadmin]";
+            String url = "jdbc:sqlserver://LAPTOP-JNL3LDJO\\SQLEXPRESS:1433;databaseName=Assignment;encrypt=true;trustServerCertificate=true;";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException ex) {

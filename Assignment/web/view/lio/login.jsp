@@ -14,7 +14,7 @@
     </head>
     <body style="text-align-last: center">
         <h1>Login Check Point</h1>
-        <form action="action" method="POST">
+        <form action="login" method="POST">
             Username: <input type="text" name="username" required><br><br>
             Password: <input type="password" name="password" required><br><br>
             Position: <select id="department" name="department">

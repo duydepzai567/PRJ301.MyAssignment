@@ -4,6 +4,7 @@
  */
 package controller.lio;
 
+import controller.Support.UserDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,7 +34,9 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("view/lio/login.jsp").forward(request, response);
+           
     }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -49,7 +52,17 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        
+        UserDBContext db = new UserDBContext();
+        User user = db.get(username, password);
+        if(user == null)
+        {
+            response.getWriter().println("invalid username or password!");
+        }
+        else
+        {
+            request.getSession().setAttribute("user", user);
+            response.getWriter().println("Hello "+user.getDisplayname());
+        }
     }
 
     /**
