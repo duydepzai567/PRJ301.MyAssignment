@@ -4,7 +4,6 @@
  */
 package controller.Support;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.util.ArrayList;
 import model.User;
 import java.sql.*;
