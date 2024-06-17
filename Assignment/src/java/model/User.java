@@ -10,10 +10,15 @@ package model;
  */
 public class User {
 
-
     private String username;
     private String Password;
     private String displayname;
+
+    public User(String username, String Password, String displayname) {
+        this.username = username;
+        this.Password = Password;
+        this.displayname = displayname;
+    }
 
     public String getUsername() {
         return username;
@@ -38,4 +43,11 @@ public class User {
     public void setDisplayname(String displayname) {
         this.displayname = displayname;
     }
+
+    @Override
+    public String toString() {
+        return "User{" + "username=" + username + ", Password=" + Password + ", displayname=" + displayname + '}';
+    }
+    
+    
 }
