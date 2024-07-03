@@ -53,7 +53,7 @@ public class LoginController extends HttpServlet {
         Account account = db.getAccountByUsernamePassword(username, password);
         if(account !=null)
         {
-            request.getSession().setAttribute("user", account);
+            request.getSession().setAttribute("account", account);
             response.getWriter().println("login successful: "+ account.getDisplayname());
         }
         else
