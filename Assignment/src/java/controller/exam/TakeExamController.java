@@ -32,7 +32,7 @@ public class TakeExamController extends BaseRequiredLecturerAuthenticationContro
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account user, Lecturer lecturer)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
     throws ServletException, IOException {
         StudentDBContext stuDB = new StudentDBContext();
         ExamDBContext examDB = new ExamDBContext();
@@ -67,7 +67,7 @@ public class TakeExamController extends BaseRequiredLecturerAuthenticationContro
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response,Account user, Lecturer lecturer)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response,Account account, Lecturer lecturer)
     throws ServletException, IOException {
         int cid = Integer.parseInt(request.getParameter("cid"));
         HashSet<Integer> eids = new HashSet<>();
