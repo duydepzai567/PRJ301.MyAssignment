@@ -21,7 +21,7 @@ public class AccountDBContext extends DBContext<Account> {
 
     public Account getAccountByUsernamePassword(String username, String password) {
         PreparedStatement stm = null;
-        Account account = null;
+        Account user = null;
         try {
             String sql = "SELECT acct.username,\n"
                     + "		acct.displayname,\n"
@@ -36,15 +36,15 @@ public class AccountDBContext extends DBContext<Account> {
             stm.setString(2, password);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                account = new Account();
-                account.setDisplayname(rs.getString("displayname"));
-                account.setUsername(username);
+                user = new Account();
+                user.setDisplayname(rs.getString("displayname"));
+                user.setUsername(username);
                 int lid = rs.getInt("lid");
                 if (lid != 0) {
                     Lecturer lecturer = new Lecturer();
                     lecturer.setId(lid);
                     lecturer.setName(rs.getString("lname"));
-                    account.setLecturer(lecturer);
+                    user.setLecturer(lecturer);
                 }
             }
         } catch (SQLException ex) {
@@ -57,7 +57,7 @@ public class AccountDBContext extends DBContext<Account> {
                 Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return account;
+        return user;
     }
 
     @Override

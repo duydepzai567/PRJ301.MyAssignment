@@ -21,11 +21,11 @@ import model.Account;
 public abstract class BaseRequiredLecturerAuthenticationController extends HttpServlet {
 
     private boolean isAuthenticated(HttpServletRequest request) {
-        Account user = (Account) request.getSession().getAttribute("user");
-        if (user == null) {
+        Account account = (Account) request.getSession().getAttribute("account");
+        if (account == null) {
             return false;
         } else {
-            Lecturer lecturer = user.getLecturer();
+            Lecturer lecturer = account.getLecturer();
             return lecturer != null;
         }
     }
@@ -42,18 +42,18 @@ public abstract class BaseRequiredLecturerAuthenticationController extends HttpS
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Account user = (Account) request.getSession().getAttribute("user");
+        Account account = (Account) request.getSession().getAttribute("account");
         if (isAuthenticated(request)) {
-            doGet(request, response, user, user.getLecturer());
+            doGet(request, response, account, account.getLecturer());
         } else {
             response.getWriter().println("access denied!");
         }
     }
 
-    protected abstract void doGet(HttpServletRequest request, HttpServletResponse response, Account user, Lecturer lecturer)
+    protected abstract void doGet(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
             throws ServletException, IOException;
 
-    protected abstract void doPost(HttpServletRequest request, HttpServletResponse response, Account user, Lecturer lecturer)
+    protected abstract void doPost(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
             throws ServletException, IOException;
 
     /**
@@ -67,10 +67,10 @@ public abstract class BaseRequiredLecturerAuthenticationController extends HttpS
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Account user = (Account)request.getSession().getAttribute("user");
+        Account account = (Account)request.getSession().getAttribute("account");
         if(isAuthenticated(request))
         {
-            doPost(request, response, user, user.getLecturer());
+            doPost(request, response, account, account.getLecturer());
         }
         else
         {
