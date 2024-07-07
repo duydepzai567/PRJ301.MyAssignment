@@ -15,6 +15,7 @@ import model.Account;
 import controller.Support.ExamDBContext;
 import controller.Support.GradeDBContext;
 import controller.Support.StudentDBContext;
+import controller.Support.CourseDBContext;
 import model.Lecturer;
 import controller.lio.BaseRequiredLecturerAuthenticationController;
 
@@ -30,45 +31,47 @@ public class TakeExamController extends BaseRequiredLecturerAuthenticationContro
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
-        throws ServletException, IOException {
-    String cidParam = request.getParameter("cid");
-    if (cidParam != null) {
-        try {
-            int cid = Integer.parseInt(cidParam);
-            
-            StudentDBContext stuDB = new StudentDBContext();
-            ExamDBContext examDB = new ExamDBContext();
-            GradeDBContext graDB = new GradeDBContext();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
+            throws ServletException, IOException {
+        String cidParam = request.getParameter("cid");
+        if (cidParam != null) {
+            try {
+                int cid = Integer.parseInt(cidParam);
 
-            ArrayList<Student> students = stuDB.getStudentsByCourse(cid);
+                StudentDBContext stuDB = new StudentDBContext();
+                ExamDBContext examDB = new ExamDBContext();
+                GradeDBContext graDB = new GradeDBContext();
 
-            String[] raw_eids = request.getParameterValues("eid");
-            ArrayList<Integer> eids = new ArrayList<>();
-            for (String raw_eid : raw_eids) {
-                eids.add(Integer.parseInt(raw_eid));
-            }
+                ArrayList<Student> students = stuDB.getStudentsByCourse(cid);
 
-            ArrayList<Exam> exams = examDB.getExamsByExamIds(eids);
-            ArrayList<Grades> grades = graDB.getGradesFromExamIds(eids);
+                String[] raw_eids = request.getParameterValues("eid");
+                ArrayList<Integer> eids = new ArrayList<>();
+                if (raw_eids != null) {
+                    for (String raw_eid : raw_eids) {
+                        eids.add(Integer.parseInt(raw_eid));
+                    }
+                }
 
-            request.setAttribute("students", students);
-            request.setAttribute("exams", exams);
-            request.setAttribute("grades", grades);
+                ArrayList<Exam> exams = examDB.getExamsByExamIds(eids);
+                ArrayList<Grades> grades = graDB.getGradesFromExamIds(eids);
 
-            request.getRequestDispatcher("../exam/take.jsp").forward(request, response);
+                request.setAttribute("students", students);
+                request.setAttribute("exams", exams);
+                request.setAttribute("grades", grades);
 
-        } catch (NumberFormatException e) {
+                request.getRequestDispatcher("../exam/take.jsp").forward(request, response);
+
+            } catch (NumberFormatException e) {
             // Handle number format exception
-            e.printStackTrace();  // Log the exception for debugging
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameter format");
-        }
-    } else {
+                e.printStackTrace();  // Log the exception for debugging
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameter format");
+            }
+        } else {
         // Handle case where cid parameter is missing
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Course ID parameter is missing");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Course ID parameter is missing");
+        }
     }
-}
 
 
     /**
@@ -82,40 +85,63 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response, A
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
             throws ServletException, IOException {
-        int cid = Integer.parseInt(request.getParameter("cid"));
-        HashSet<Integer> eids = new HashSet<>();
+        String cidParam = request.getParameter("cid");
+        if (cidParam == null || cidParam.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Course ID parameter is missing");
+            return;
+        }
+        
+        int cid;
+        try {
+            cid = Integer.parseInt(cidParam);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Course ID format");
+            return;
+        }
 
+        HashSet<Integer> eids = new HashSet<>();
         ArrayList<Grades> grades = new ArrayList<>();
 
         String[] raw_gradeids = request.getParameterValues("gradeid");
-        for (String raw_gradeid : raw_gradeids) {
-            int sid = Integer.parseInt(raw_gradeid.split("_")[0]);
-            int eid = Integer.parseInt(raw_gradeid.split("_")[1]);
+        if (raw_gradeids != null) {
+            for (String raw_gradeid : raw_gradeids) {
+                String[] parts = raw_gradeid.split("_");
+                if (parts.length == 2) {
+                    try {
+                        int sid = Integer.parseInt(parts[0]);
+                        int eid = Integer.parseInt(parts[1]);
+                        eids.add(eid);
 
-            eids.add(eid);
+                        String raw_score = request.getParameter("score" + sid + "_" + eid);
+                        if (raw_score != null && !raw_score.isEmpty()) {
+                            try {
+                                float score = Float.parseFloat(raw_score);
 
-            String raw_score = request.getParameter("score" + sid + "_" + eid);
-            if (raw_score != null && !raw_score.isEmpty()) {
-                try {
-                    float score = Float.parseFloat(raw_score);
+                                Grades g = new Grades();
+                                Exam e = new Exam();
+                                e.setId(eid);
 
-                    Grades g = new Grades();
-                    Exam e = new Exam();
-                    e.setId(eid);
+                                Student s = new Student();
+                                s.setId(sid);
 
-                    Student s = new Student();
-                    s.setId(sid);
+                                g.setExam(e);
+                                g.setStudent(s);
+                                g.setScore(score);
 
-                    g.setExam(e);
-                    g.setStudent(s);
-                    g.setScore(score);
-
-                    grades.add(g);
-                } catch (NumberFormatException e) {
+                                grades.add(g);
+                            } catch (NumberFormatException e) {
                     // Handle parsing error if necessary
-                    e.printStackTrace();  // Log or handle the exception
+                                e.printStackTrace();  // Log or handle the exception
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();  // Log the exception for debugging
+                    }
                 }
             }
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No grades provided");
+            return;
         }
 
         GradeDBContext db = new GradeDBContext();
@@ -138,4 +164,5 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response, A
         return "Short description";
     }// </editor-fold>
 
-}
+    }
+
