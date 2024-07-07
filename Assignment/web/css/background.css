@@ -1,20 +1,58 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : Jun 3, 2024, 8:30:46 PM
-    Author     : DUCDUY2003
-*/
-
-
-
-body{
-    ont-family: "Helvetica Neue", "Open sans", sans-serif;
-    background-color: gray;
-    background-image: -webkit-linear-gradient(top left, #a802e0, #f7676a);
+body {
+    font-family: "Helvetica Neue", "Open Sans", sans-serif;
+    background-color: #282c34;
+    background-image: linear-gradient(to top left, #6a11cb, #2575fc);
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
-#id{
-    color: red;
+
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.btn-link {
+    color: #6a11cb;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.btn-link:hover {
+    color: #2575fc;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+h4 {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.btn-sm {
+    font-size: 14px;
+    padding: 5px 10px;
 }
