@@ -15,27 +15,27 @@
     <link href="../../css/background.css" rel="stylesheet" type="text/css">
     <style>
         body {
-            background-color: #f0f8ff; /* Light blue background color */
+            background-color: #f0f8ff; 
             font-family: Arial, sans-serif;
         }
         .container {
-            background: #ffffff; /* White background for content area */
-            border-radius: 15px; /* Rounded corners */
+            background: #ffffff; 
+            border-radius: 15px; 
             padding: 30px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
         }
         h1 {
-            color: #007bff; /* Bootstrap primary color */
+            color: #007bff; 
         }
         .btn-link {
-            color: #007bff; /* Bootstrap primary color */
+            color: #007bff; 
         }
         .btn-link:hover {
-            text-decoration: none; /* Remove underline on hover */
+            text-decoration: none; 
         }
         ul {
-            list-style-type: disc; /* Bullet points */
-            padding-left: 20px; /* Indentation for bullet points */
+            list-style-type: disc; 
+            padding-left: 20px; 
         }
     </style>
 </head>
