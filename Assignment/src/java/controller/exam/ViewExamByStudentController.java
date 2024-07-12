@@ -12,24 +12,25 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import controller.lio.BaseRequiredLecturerAuthenticationController;
 import model.Account;
-import model.Lecturer;
-import model.Course;
 import model.Exam;
-import model.Grades;
+import model.Subject;
+import model.Assessment;
 import controller.Support.ExamDBContext;
-import controller.Support.CourseDBContext;
+import controller.Support.SubjectsDBContext;
+import controller.Support.AssessmentDBContext;
+import controller.lio.BaseRequiredLecturerAuthenticationController;
 import jakarta.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import model.Student;
+import model.Lecturer;
 
 /**
  *
  * @author DUCDUY2003
  */
-@WebServlet(name="ViewCourseByLecturerController", urlPatterns={"/exam/lecturer"})
-public class ViewCourseByStudentController extends BaseRequiredLecturerAuthenticationController {
+@WebServlet(name="ViewCourseByLecturerController", urlPatterns={"/exam/schedule"})
+public class ViewExamByStudentController extends BaseRequiredLecturerAuthenticationController {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -42,11 +43,11 @@ public class ViewCourseByStudentController extends BaseRequiredLecturerAuthentic
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, Student student)
             throws ServletException, IOException {
-        CourseDBContext db = new CourseDBContext();
-        int lid = student.getId();
-        ArrayList<Course> courses = db.getCoursesByLecturer(lid);
-        request.setAttribute("courses", courses);
-        request.getRequestDispatcher("../exam/lecturer.jsp").forward(request, response);
+        SubjectsDBContext db = new SubjectsDBContext();
+        int sid = student.getId();
+        ArrayList<Subject> subject = db.getSubjectsByCourse(sid);
+        request.setAttribute("subject", subject);
+        request.getRequestDispatcher("../exam/schedule.jsp").forward(request, response);
     }
 
     /**
@@ -57,17 +58,16 @@ public class ViewCourseByStudentController extends BaseRequiredLecturerAuthentic
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, Student student)
             throws ServletException, IOException {
-        int cid = Integer.parseInt(request.getParameter("cid"));
-        int lid = lecturer.getId();
+        int subid = Integer.parseInt(request.getParameter("subid"));
+        int sid = student.getId();
 
         ExamDBContext db = new ExamDBContext();
-        ArrayList<Exam> exams = db.getExamsByCourse(cid);
+        ArrayList<Exam> exams = db.getExamsByCourse(sid);
         request.setAttribute("exams", exams);
 
-        request.getRequestDispatcher("../exam/lecturer.jsp").forward(request, response);
+        request.getRequestDispatcher("../exam/schdule.jsp").forward(request, response);
 
     }
 
@@ -83,6 +83,11 @@ public class ViewCourseByStudentController extends BaseRequiredLecturerAuthentic
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, Lecturer lecturer) throws ServletException, IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

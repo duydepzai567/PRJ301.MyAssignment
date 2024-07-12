@@ -11,13 +11,13 @@
         <title>Student Scores</title>
     </head>
     <body>
-        <h1>Grade Transcript</h1>
+        <h1>Exam Schedules</h1>
         <table border="1">
             <tr>
-                <th>Course</th>
-                <th>SEMESTER</th>
-                <th>SUBJECT NAME</th>
-                <th>GRADE</th>
+                <th>SUBID</th>
+                <th>SUBNAME</th>
+                <th>ANAME</th>
+                <th>FROM</th>
 
             </tr>
             <c:forEach var="score" items="${scores}">
