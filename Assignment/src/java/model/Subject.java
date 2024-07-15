@@ -48,6 +48,5 @@ public class Subject {
     public void setAssessments(ArrayList<Assessment> assessments) {
         this.assessments = assessments;
     }
-
-    
+  
 }
