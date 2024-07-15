@@ -18,7 +18,7 @@ import model.Student;
  *
  * @author DUCDUY2003
  */
-public class GradeDBContext extends DBContext<Grades>{
+public class GradeDBContext extends DBContext<Grades> {
 
     public ArrayList<Grades> getGradesFromExamIds(ArrayList<Integer> eids) {
         ArrayList<Grades> grades = new ArrayList<>();
@@ -113,6 +113,54 @@ public class GradeDBContext extends DBContext<Grades>{
             }
         }
 
+    }
+
+    public ArrayList<Grades> getGradesByExamStudent(int eid, int sid) {
+        ArrayList<Grades> grades = new ArrayList<>();
+        PreparedStatement stm = null;
+        try {
+            String sql = "SELECT [eid]\n"
+                    + "      ,[sid]\n"
+                    + "      ,[score]\n"
+                    + "  FROM [dbo].[grades]\n"
+                    + "  where [sid] = ? and eid = ?";
+                   
+
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, sid);
+            stm.setInt(2, eid);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Grades g = new Grades();
+                g.setScore(rs.getFloat("score"));
+
+                Student s = new Student();
+                s.setId(rs.getInt("sid"));
+                g.setStudent(s);
+
+                Exam e = new Exam();
+                e.setId(rs.getInt("eid"));
+                g.setExam(e);
+
+                grades.add(g);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GradeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GradeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return grades;
     }
 
     @Override

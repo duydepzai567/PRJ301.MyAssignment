@@ -4,9 +4,9 @@
  */
 package controller.exam;
 
-import controller.Support.CourseDBContext;
 import controller.Support.StudentDBContext;
 import controller.Support.GradeDBContext;
+import controller.Support.ExamDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import controller.Support.AccountDBContext;
@@ -17,9 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Student;
 import model.Grades;
-import model.Account;
+import model.Exam;
 import java.util.ArrayList;
-import model.Course;
 
 /**
  *
@@ -37,14 +36,32 @@ public class ViewGradeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Student student)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CourseDBContext db = new CourseDBContext();
-        int sid = student.getId();
-        ArrayList<Course> courses = db.getCoursesByLecturer(sid);
-        request.setAttribute("courses", courses);
-        request.getRequestDispatcher("../exam/grade.jsp").forward(request, response);
+          String examIdParam = request.getParameter("eid");
+        String studentIdParam = request.getParameter("sid");
 
+        if (examIdParam != null && studentIdParam != null) {
+            try {
+                int eid = Integer.parseInt(examIdParam);
+                int sid = Integer.parseInt(studentIdParam);
+
+                // Retrieve grades from the database
+                GradeDBContext gradeDB = new GradeDBContext();
+                ArrayList<Grades> grades = gradeDB.getGradesByExamStudent(eid, sid);
+
+                // Set grades as a request attribute and forward to JSP
+                request.setAttribute("grades", grades);
+                request.getRequestDispatcher("../exam/grade.jsp").forward(request, response);
+
+            } catch (NumberFormatException e) {
+                // Handle invalid input
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid exam or student ID.");
+            }
+        } else {
+            // Handle missing parameters
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing exam or student ID.");
+        }
     }
 
     /**
@@ -55,13 +72,9 @@ public class ViewGradeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Student student)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int cid = Integer.parseInt(request.getParameter("cid"));
-        int sid = student.getId();
-        GradeDBContext db = new GradeDBContext();
-        request.getRequestDispatcher("../exam/grade.jsp").forward(request, response);
-
+               doGet(request, response);
     }
 
     /**

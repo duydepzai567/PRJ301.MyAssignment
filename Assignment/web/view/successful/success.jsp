@@ -49,7 +49,7 @@
                 <div class="col-md-6 text-left">
                     <h4>Reports</h4>
                     <ul>
-                        <li><a href="" class="btn btn-link"> Grade Transcript </a></li>
+                        <li><a href="http://localhost:8080/Assignment/exam/grade" class="btn btn-link"> Grade Transcript </a></li>
                         <li><a href="" class="btn btn-link"> View exam schedule </a></li>
 
                     </ul>
